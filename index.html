@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>GlowSwarm</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <!-- Start Screen -->
+  <div id="menu" class="screen visible" aria-hidden="false">
+    <div class="card hero">
+      <div class="brand">
+        <div class="logoDot"></div>
+        <div class="brandText">
+          <div class="brandTitle">GlowSwarm</div>
+          <div class="brandTag">Neon swarm arena · Multiplayer + AI</div>
+        </div>
+      </div>
+
+      <div class="bullets">
+        <div class="bullet"><span class="bIcon">✨</span> Collect glow to grow</div>
+        <div class="bullet"><span class="bIcon">🌀</span> Space = Tight formation (defense)</div>
+        <div class="bullet"><span class="bIcon">⚡</span> Shift / Boost button = Dash (drops mass)</div>
+      </div>
+
+      <div class="row">
+        <input id="nameInput" maxlength="16" placeholder="Name (max 16)" autocomplete="off" />
+        <button id="playBtn">Play</button>
+      </div>
+
+      <div class="small">
+        Desktop: Mouse move · Space tight · Shift/right-click boost<br>
+        Mobile: Left joystick move · Tight + Boost buttons
+      </div>
+    </div>
+  </div>
+
+  <!-- Death / Respawn Screen -->
+  <div id="deathScreen" class="screen hidden" aria-hidden="true">
+    <div class="card">
+      <h2>You were dispersed</h2>
+      <p class="muted">Final score: <span id="finalScore">0</span></p>
+
+      <div class="respawnRow">
+        <div class="pill">Respawn in <span id="respawnTimer">0</span>s</div>
+        <button id="respawnBtn" disabled>Respawn</button>
+      </div>
+
+      <div class="small muted">Tip: Tight formation helps you survive close encounters.</div>
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="panel left">
+      <div class="title">GlowSwarm</div>
+      <div>Score: <span id="score">0</span></div>
+      <div>Swarm Size: <span id="swarmSize">0</span></div>
+      <div>Formation: <span id="formation">Wide</span></div>
+      <div>Boost: <span id="boostStatus">Ready</span></div>
+      <div>Shield: <span id="shieldStatus">0.0s</span></div>
+      <div>Players: <span id="playerCount">0</span> · AI: <span id="aiCount">0</span></div>
+    </div>
+
+    <div class="panel right">
+      <div class="subtitle">Leaderboard</div>
+      <ol id="leaderboard"></ol>
+    </div>
+
+    <div class="panel bottom">
+      <div class="subtitle">Controls</div>
+      <div>Desktop: Mouse move · Space tight · Shift / Right click boost</div>
+      <div>Mobile: Left joystick move · Tight + Boost buttons</div>
+      <div>Minimap: top-left</div>
+    </div>
+  </div>
+
+  <!-- Mobile Controls (auto-shown on touch devices) -->
+  <div id="mobileControls" class="mobile hidden" aria-hidden="true">
+    <div id="joyBase" class="joyBase">
+      <div id="joyKnob" class="joyKnob"></div>
+    </div>
+
+    <div class="mobileBtns">
+      <button id="tightBtn" class="mBtn">Tight</button>
+      <button id="boostBtn" class="mBtn primary">Boost</button>
+    </div>
+  </div>
+
+  <!-- Local Socket.IO served by Flask-SocketIO -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="{{ url_for('static', filename='game.js') }}"></script>
+</body>
+</html>
